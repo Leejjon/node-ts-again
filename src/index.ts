@@ -1,11 +1,13 @@
 import express from "express";
+import { postComment } from "./controller/RequestController";
 
 const PORT = process.env.PORT || 8080;
+
 const app = express();
 
-app.get( "/", ( req, res ) => {
-    res.send( "Hello Leon!" );
-} );
+app.use(express.json());
+
+app.post( "/comments", postComment);
 
 const server = app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
