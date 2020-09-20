@@ -1,14 +1,14 @@
-import {IsString} from "class-validator";
+import {IsAlphanumeric, IsString, Length, Matches} from "class-validator";
 
-export interface NewCommentRequest {
-    message: string,
-    nickname: string
-}
+export class NewCommentRequest {
 
-export class NewCommentRequestClass {
     @IsString()
+    @Matches(/^([a-zA-Z0-9_ .,:;-]){10,200}$/)
     public message: string;
+
     @IsString()
+    @Length(3, 20)
+    @IsAlphanumeric()
     public nickname: string;
 
     constructor(message: string, nickname: string) {
@@ -16,7 +16,6 @@ export class NewCommentRequestClass {
         this.nickname = nickname;
     }
 }
-
 
 export interface CommentConfirmation {
     id: string,
