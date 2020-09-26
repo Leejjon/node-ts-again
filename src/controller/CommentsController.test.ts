@@ -18,9 +18,17 @@ describe("Test the API calls", () => {
         expect(res.body.id).to.equal("commentId");
     });
 
-    it('Send invalid json', async () => {
+    it('Send invalid json syntax', async () => {
         const res = await request(server)
             .post('/comments').type('json').send('{"invalid"}');
+        expect(res.status).to.equal(400);
+    });
+
+    it('Send valid json with missing nickname field', async () => {
+        const res = await request(server)
+            .post('/comments').send({
+                message: "This is a post.,"
+            });
         expect(res.status).to.equal(400);
     });
 });
