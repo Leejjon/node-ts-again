@@ -29,6 +29,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 function validationMiddleware<T>(type: any): RequestHandler {
     return async (req, res, next) => {
+        // For some reason the class-transformer and class-validator don't see arrays as a validation error.
+        if (!(req.body.startsWith('{') && req.body.endsWith('}'))) {
+            res.status(400);
+            res.send("Invalid request.");
+        }
+
         let validationErrors = await validate(plainToClass(type, req.body));
 
         if (validationErrors.length > 0) {
