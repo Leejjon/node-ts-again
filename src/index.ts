@@ -1,8 +1,5 @@
 import express, {Request, Response, NextFunction, RequestHandler} from "express";
 import {postComment} from "./controller/CommentsController";
-import {plainToClass} from "class-transformer";
-import {validate} from "class-validator";
-import {NewCommentRequest} from "./model/Comment";
 
 const PORT = process.env.PORT || 8080;
 
@@ -27,23 +24,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     next();
 });
 
-function validationMiddleware<T>(type: any): RequestHandler {
-    return async (req, res, next) => {
-        let validationErrors = await validate(plainToClass(type, req.body));
-
-        if (validationErrors.length > 0) {
-            validationErrors.forEach((validationError) => {
-                console.log(validationError);
-            });
-            res.status(400);
-            res.send("Invalid request.");
-        } else {
-            next();
-        }
-    };
-}
-
-app.post("/comments", validationMiddleware(NewCommentRequest), postComment);
+app.post("/comments", postComment);
 
 export const server = app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

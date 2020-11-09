@@ -13,9 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "class-transformer": "^0.3.1",
-    "class-validator": "^0.12.2",
-    "express": "^4.17.1"
+    "class-transformer": "0.3.1",
+    "class-validator": "0.12.2",
+    "express": "4.17.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.12",
