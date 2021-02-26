@@ -21,7 +21,13 @@ describe("Test the API calls", () => {
         expect(res.body.id).to.equal("commentId");
     });
 
-    it('Send invalid json syntax', async () => {
+    it('Send invalid json syntax - arrays', async () => {
+        const res = await request(server)
+            .post('/comments').type('json').send('[]');
+        expect(res.status).to.equal(400);
+    });
+
+    it('Send invalid json syntax - no value', async () => {
         const res = await request(server)
             .post('/comments').type('json').send('{"invalid"}');
         expect(res.status).to.equal(400);
