@@ -30,9 +30,16 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 function validationMiddleware<T>(type: any): RequestHandler {
     return async (req, res, next) => {
         // For some reason the class-transformer and class-validator don't see arrays as a validation error.
-        if (!(req.body.startsWith('{') && req.body.endsWith('}'))) {
+        let requestBody = req.body;
+        // TODO: Adding .toString() is only needed when running via supertest
+        requestBody.toString = () => {
+            return JSON.stringify(requestBody);
+        }
+        if (!(requestBody.toString().startsWith('{') && requestBody.toString().endsWith('}'))) {
+            console.log('No valid json');
             res.status(400);
-            res.send("Invalid request.");
+            res.send("Invalid request");
+            return;
         }
 
         let validationErrors = await validate(plainToClass(type, req.body));
